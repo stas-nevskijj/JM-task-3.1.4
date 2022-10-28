@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>User page</title>
+</head>
+<body>
+<!--Навигационная панель-->
+<nav class="navbar navbar-dark bg-dark">
+    <!-- Navbar content -->
+    <div th:each="role : ${user.getRoles()}">
+        <h4>
+            <p class="text-white mb-0">
+                <th:block th:text="${user.getUsername()} + ' with roles: '">user with roles: USER</th:block>
+                <th:block th:text="${role} + ' '"></th:block>
+            </p>
+        </h4>
+    </div>
+    <a class="btn btn-link" href="/logout" role="button"><p class="text-secondary mb-0">Logout</p></a>
+</nav>
+
+<div class="container-fluid">
+    <!-- Content here -->
+    <div class="row">
+
+        <div class="col-first col-md-2 bd-sidebar">
+            <div class="bg-white vh-100 m-0 p-0 w-100">
+                <ul class="list-group">
+                    <a href="/user" class="list-group-item list-group-item-action active" aria-current="true">
+                        User
+                    </a>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-second col-md-10 bg-light bd-center">
+            <h1>User information-page</h1>
+            <div class="border h5 pl-3 pt-2 pb-2 m-0">
+                About user
+            </div>
+            <div class="bg-white border p-3">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Age</th>
+                        <th>Role</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td th:text="${user.getId()}">id</td>
+                        <td th:text="${user.getUsername()}">username</td>
+                        <td th:text="${user.getAge()}">age</td>
+                        <td th:each="role : ${user.getRoles()}">
+                            <span th:text="${role}">roles</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
