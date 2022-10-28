@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,9 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -65,6 +69,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void save(User person) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.writeValue(new File("user.json"), person);
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+
+
         String encode = passwordEncoder.encode(person.getPassword());
         person.setPassword(encode);
 
