@@ -36,4 +36,16 @@ public class RestAdminController {
         userService.save(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") int id, @RequestBody User user) {
+        userService.update(id, user);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
+        userService.delete(id);
+        return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+    }
 }
