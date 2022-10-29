@@ -22,16 +22,16 @@ public class RestAdminController {
     }
 
     @GetMapping
-    public List<User> index() {
-        return userService.index();
+    public ResponseEntity<List<User>> index() {
+        return new ResponseEntity<>(userService.index(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public User show(@PathVariable("id") int id) {
-        return userService.show(id).get();
+    public ResponseEntity<User> show(@PathVariable("id") int id) {
+        return new ResponseEntity<>(userService.show(id).get(), HttpStatus.OK);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody User user) {
         userService.save(user);
         return ResponseEntity.ok(HttpStatus.OK);
