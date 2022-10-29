@@ -13,7 +13,6 @@ import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -69,14 +68,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void save(User person) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.writeValue(new File("user.json"), person);
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-
-
         String encode = passwordEncoder.encode(person.getPassword());
         person.setPassword(encode);
 
@@ -91,19 +82,20 @@ public class UserServiceImpl implements UserService {
                 }
             }
         }
-
-
         usersRepository.saveAndFlush(person);
     }
 
     @Override
     @Transactional
     public void update(int id, User updatedPerson) {
-        if (!updatedPerson.getPassword().equals("")) {
+        User user = usersRepository.findById(id).get();
+
+        if (!Objects.equals(updatedPerson.getPassword(), user.getPassword())) {
             String encode = passwordEncoder.encode(updatedPerson.getPassword());
             updatedPerson.setPassword(encode);
         }
 
+        if (!updatedPerson.getRoles().isEmpty()) {
 
         Set<Role> copyOfRoles = new HashSet<>(updatedPerson.getRoles());
         updatedPerson.getRoles().clear();
@@ -116,12 +108,12 @@ public class UserServiceImpl implements UserService {
                 }
             }
         }
+        user.setRoles(updatedPerson.getRoles());
+        }
 
-        User user = usersRepository.findById(id).get();
         user.setUsername(updatedPerson.getUsername());
         user.setAge(updatedPerson.getAge());
         user.setPassword(updatedPerson.getPassword());
-        user.setRoles(updatedPerson.getRoles());
         usersRepository.saveAndFlush(user);
     }
 
@@ -129,5 +121,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void delete(int id) {
         usersRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User findByUsername(String name) {
+        return usersRepository.findByUsername(name).get();
     }
 }
