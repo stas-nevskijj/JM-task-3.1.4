@@ -1,18 +1,15 @@
 package ru.kata.spring.boot_security.demo.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.RoleDAO;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.repositories.RolesRepository;
 import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -21,13 +18,13 @@ import java.util.Set;
 
 @Component
 public class UserServiceImpl implements UserService {
-    private final RoleDAO roleDAO;
     private final UsersRepository usersRepository;
+    private final RolesRepository rolesRepository;
 
     @Autowired
-    public UserServiceImpl(UsersRepository usersRepository, RoleDAO roleDAO) {
+    public UserServiceImpl(UsersRepository usersRepository, RolesRepository rolesRepository) {
         this.usersRepository = usersRepository;
-        this.roleDAO = roleDAO;
+        this.rolesRepository = rolesRepository;
     }
 
     private PasswordEncoder passwordEncoder;
@@ -76,7 +73,7 @@ public class UserServiceImpl implements UserService {
         for (Role personRole : copyOfRoles) {
             personRole.setName("ROLE_" + personRole.getName());
 
-            for (Role mainRole : roleDAO.getAllRoles()) {
+            for (Role mainRole : rolesRepository.getSetOfRoles()) {
                 if (Objects.equals(mainRole.getName(), personRole.getName())) {
                     person.getRoles().add(mainRole);
                 }
@@ -102,7 +99,7 @@ public class UserServiceImpl implements UserService {
         for (Role personRole : copyOfRoles) {
             personRole.setName("ROLE_" + personRole.getName());
 
-            for (Role mainRole : roleDAO.getAllRoles()) {
+            for (Role mainRole : rolesRepository.getSetOfRoles()) {
                 if (Objects.equals(mainRole.getName(), personRole.getName())) {
                     updatedPerson.getRoles().add(mainRole);
                 }
