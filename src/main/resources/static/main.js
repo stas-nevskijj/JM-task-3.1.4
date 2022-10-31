@@ -28,6 +28,13 @@ function getAllUsers() {
             })
             document.getElementById('dataTable').innerHTML = temp;
         })
+    let responsePromise = fetch("http://localhost:8080/api/show")
+    responsePromise
+        .then(res => res.json())
+        .then(user => {
+            $('#headerUsername').empty().append(user.username)
+            $('#headerRoles').empty().append(user.roles.map(role => " " + role.name.substring(5)))
+        })
 }
 
 getAllUsers()
@@ -149,6 +156,8 @@ function refreshTable() {
     while (table.rows.length > 1) {
         table.deleteRow(1)
     }
+
+    let navbar = document.getElementById('')
     getAllUsers()
 }
 

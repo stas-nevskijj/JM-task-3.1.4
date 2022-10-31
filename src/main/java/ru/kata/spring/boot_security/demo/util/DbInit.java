@@ -12,7 +12,6 @@ import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class DbInit {

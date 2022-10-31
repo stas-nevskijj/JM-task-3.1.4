@@ -19,9 +19,9 @@
     <div>
         <h4>
             <p class="text-white mb-0">
-                <th:block th:text="${currentUser.getUsername()} + ' with roles: '">Admin with roles:ADMIN USER
-                </th:block>
-                <th:block th:each="role : ${currentUser.getRoles()}" th:text="${role} + ' '"></th:block>
+                <a class="navbar-brand font-weight-bold" id="headerUsername"></a>
+                <a class="navbar-brand">with roles:</a>
+                <a class="navbar-brand" id="headerRoles"></a>
             </p>
         </h4>
     </div>

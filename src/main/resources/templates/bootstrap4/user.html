@@ -17,9 +17,14 @@
     <!-- Navbar content -->
     <div>
         <h4>
+<!--            <p class="text-white mb-0">-->
+<!--                <th:block th:text="${user.getUsername()} + ' with roles: '">user with roles: USER</th:block>-->
+<!--                <th:block th:each="role : ${user.getRoles()}" th:text="${role} + ' '"></th:block>-->
+<!--            </p>-->
             <p class="text-white mb-0">
-                <th:block th:text="${user.getUsername()} + ' with roles: '">user with roles: USER</th:block>
-                <th:block th:each="role : ${user.getRoles()}" th:text="${role} + ' '"></th:block>
+               <a class="navbar-brand font-weight-bold" id="headerUsername"></a>
+                <a class="navbar-brand">with roles:</a>
+               <a class="navbar-brand" id="headerRoles"></a>
             </p>
         </h4>
     </div>
@@ -86,13 +91,16 @@
     $(async function() {
         await thisUser()
     })
-    function thisUser() {
-        fetch("http://localhost:8080/api/show")
+    async function thisUser() {
+        let responsePromise = fetch("http://localhost:8080/api/show");
+            responsePromise
             .then(res => res.json())
             .then(user => {
+                $('#headerUsername').append(user.username)
+                $('#headerRoles').append(user.roles.map(role => " " + role.name.substring(5)))
                 let temp = ''
                 console.log(user)
-                    temp += `
+                temp += `
                 <tr>
                 <td id="id${user.id}">${user.id}</td>
                 <td id="username${user.username}">${user.username}</td>
