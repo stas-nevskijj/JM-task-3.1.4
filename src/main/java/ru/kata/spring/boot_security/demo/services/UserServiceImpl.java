@@ -19,12 +19,12 @@ import java.util.Set;
 @Component
 public class UserServiceImpl implements UserService {
     private final UsersRepository usersRepository;
-    private final RolesRepository rolesRepository;
+    private final RoleService roleService;
 
     @Autowired
-    public UserServiceImpl(UsersRepository usersRepository, RolesRepository rolesRepository) {
+    public UserServiceImpl(UsersRepository usersRepository, RoleService roleService) {
         this.usersRepository = usersRepository;
-        this.rolesRepository = rolesRepository;
+        this.roleService = roleService;
     }
 
     private PasswordEncoder passwordEncoder;
@@ -34,21 +34,6 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
-    @PostConstruct
-    public void init() {
-        Optional<User> user = usersRepository.findByUsername("admin");
-        if (user.isEmpty()) {
-            User admin = new User();
-            admin.setUsername("admin");
-            String encode = passwordEncoder.encode("admin");
-            admin.setPassword(encode);
-            admin.getRoles().add(new Role("ROLE_ADMIN"));
-            admin.setAge(12);
-            usersRepository.save(admin);
-        }
-
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -73,7 +58,7 @@ public class UserServiceImpl implements UserService {
         for (Role personRole : copyOfRoles) {
             personRole.setName("ROLE_" + personRole.getName());
 
-            for (Role mainRole : rolesRepository.getSetOfRoles()) {
+            for (Role mainRole : roleService.getAllRoles()) {
                 if (Objects.equals(mainRole.getName(), personRole.getName())) {
                     person.getRoles().add(mainRole);
                 }
@@ -99,7 +84,7 @@ public class UserServiceImpl implements UserService {
         for (Role personRole : copyOfRoles) {
             personRole.setName("ROLE_" + personRole.getName());
 
-            for (Role mainRole : rolesRepository.getSetOfRoles()) {
+            for (Role mainRole : roleService.getAllRoles()) {
                 if (Objects.equals(mainRole.getName(), personRole.getName())) {
                     updatedPerson.getRoles().add(mainRole);
                 }
